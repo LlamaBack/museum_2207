@@ -62,4 +62,32 @@ RSpec.describe Museum do
       })
   end
 
+  it "Can hold a lottery for each exhibit" do
+    patron_1 = Patron.new("Bob", 0)
+    dmns.add_exhibit(gems_and_minerals)
+    dmns.add_exhibit(dead_sea_scrolls)
+    dmns.add_exhibit(imax)
+
+    patron_1.add_interest("Gems and Minerals")
+    patron_1.add_interest("Dead Sea Scrolls")
+
+    patron_2.add_interest("Dead Sea Scrolls")
+
+    patron_3.add_interest("Dead Sea Scrolls")
+
+    dmns.admit(patron_1)
+    dmns.admit(patron_2)
+    dmns.admit(patron_3)
+
+    expect(dmns.ticket_lottery_contestants(dead_sea_scrolls)).to eq([patron_1, patron_3])
+    allow(dmns).to recieve(:draw_lottery_winner).and_return('Johnny')
+    expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq('Johnny')
+
+    expect(dmns.draw_lottery_winner(gems_and_minerals)).to eq(nil)
+
+    expect(dmns.announce_lottery_winner(imax)).to eq("No winners for this lottery")
+
+    expect(dmns.announce_lottery_winner(gems_and_minerals)).to eq("Bob has won the Gems and Minerals exhibit lottery")
+  end
+
 end
