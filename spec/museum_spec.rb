@@ -80,10 +80,11 @@ RSpec.describe Museum do
     dmns.admit(patron_3)
 
     expect(dmns.ticket_lottery_contestants(dead_sea_scrolls)).to eq([patron_1, patron_3])
-    allow(dmns).to recieve(:draw_lottery_winner).and_return('Johnny')
-    expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq('Johnny')
 
     expect(dmns.draw_lottery_winner(gems_and_minerals)).to eq(nil)
+
+    allow(dmns).to receive(:draw_lottery_winner).and_return('Johnny')
+    expect(dmns.draw_lottery_winner(dead_sea_scrolls)).to eq('Johnny')
 
     expect(dmns.announce_lottery_winner(imax)).to eq("No winners for this lottery")
 

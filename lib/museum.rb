@@ -7,6 +7,7 @@ class Museum
     @name = name
     @exhibits = []
     @patrons = []
+    @lottery_winners = {}
   end
 
   def add_exhibit(exhibit)
@@ -33,5 +34,28 @@ class Museum
     exhibit_interests
   end
 
-  
+  def ticket_lottery_contestants(exhibit)
+    patrons_by_exhibit_interest[exhibit].find_all do |patron|
+      patron.spending_money < exhibit.cost
+    end
+  end
+
+  def draw_lottery_winner(exhibit)
+    if ticket_lottery_contestants(exhibit) == []
+      return nil
+    end
+
+    winner = ticket_lottery_contestants(exhibit).sample
+    @lottery_winners[exhibit] = winner
+    winner.name
+  end
+
+  def announce_lottery_winner(exhibit)
+    if !@lottery_winners.key?(exhibit)
+      return "No winners for this lottery"
+    end
+
+    return "#{@lottery_winners[exhibit].name} has won the #{exhibit.name} exhibit lottery"
+  end
+
 end
