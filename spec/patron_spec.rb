@@ -1,4 +1,4 @@
-require 'patron'
+require './lib/patron'
 
 RSpec.describe Patron do
   let(:patron_1) {Patron.new("Bob", 20)}
